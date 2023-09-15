@@ -31,7 +31,7 @@
     or other common WSGI web servers.
 """
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import os
 from uuid import uuid4
 
@@ -39,6 +39,16 @@ from google.cloud import storage
 
 
 app = Flask(__name__)
+
+
+@app.route("/uploader", methods=["POST"])
+def handle_uploads2():
+    return handle_uploads()
+
+
+@app.route("/uploader", methods=["GET"])
+def show_upload_page2():
+    return render_template("index.html"), 200
 
 
 @app.route("/", methods=["GET"])
@@ -61,8 +71,10 @@ def handle_uploads():
         for file in request.files.getlist(key):
             if uploaded_to_storage(file, bucket):
                 handled += 1
+            else:
+                return "Could not upload file", 503
 
-    return f"Uploaded {handled} file(s)", 200
+    return f"<h1 style='font-size: 100px;'>Uploaded {handled} file(s)</h1>", 201
 
 
 def uploaded_to_storage(file, bucket):

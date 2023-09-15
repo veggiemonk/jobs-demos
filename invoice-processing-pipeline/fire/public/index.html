@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Firebase Hosting</title>
+
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/10.4.0/firebase-app-compat.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/10.4.0/firebase-auth-compat.js"></script>
+  <!-- <script defer src="/__/firebase/10.4.0/firebase-database-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-firestore-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-functions-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-messaging-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-storage-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-analytics-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-remote-config-compat.js"></script>
+  <script defer src="/__/firebase/10.4.0/firebase-performance-compat.js"></script> -->
+  <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+  <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+  <style media="screen">
+    body {
+      background: #ECEFF1;
+      color: rgba(0, 0, 0, 0.87);
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #load {
+      color: rgba(0, 0, 0, 0.4);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+
+      body,
+      #message {
+        margin-top: 0;
+        background: white;
+        box-shadow: none;
+      }
+
+      body {
+        border-top: 16px solid #ffa100;
+      }
+    }
+
+    .main {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+
+    button {
+      background-color: #008CBA;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+
+    #profile {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 20px;
+    }
+
+    #profile img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
+
+    #profile h3 {
+      text-align: center;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="profile">
+    <h3>Not Authenticated</h3>
+  </div>
+  <p id="load">Firebase SDK Loading&hellip;</p>
+  <div class="main">
+    <div class="uploader">
+      <a href="/uploader"><button>Uploader</button> </a>
+    </div>
+    <div class="reviewer">
+      <a href="/reviewer"><button>Reviewer</button></a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadEl = document.querySelector('#load');
+      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+      // // The Firebase SDK is initialized and available here!
+      //
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).
+        then(() => {
+          return firebase.auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+              console.log({ isSignedIN: true, signInWithPopup: true })
+              document.querySelector('#profile').innerHTML = `<img src="rickroll.gif" alt="profile picture"><h3>Authenticated</h3>`
+            }).catch((error) => {
+              console.log({ error, signInWithPopup: false })
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              document.querySelector('#profile').innerHTML = `<h3>${errorCode} : ${errorMessage}</h3>`
+            });
+
+
+          // ...})
+        }).catch((error) => {
+          console.log({ error, setPersistence: false })
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          // var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          // var credential = error.credential;
+          // ...
+          document.querySelector('#profile').innerHTML = `<h3>${errorCode} : ${errorMessage}</h3>`
+        });
+
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          console.log({ isSignedIN: true, onAuthStateChanged: true })
+          document.querySelector('#profile').innerHTML = `<img src="rickroll.gif" alt="profile picture"><h3>Authenticated</h3>`
+
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/v8/firebase.User
+          // var uid = user.uid;
+        } else {
+          // User is signed out
+          // ...
+          console.log({ loggedOut: true, onAuthStateChanged: false })
+          document.querySelector('#profile').innerHTML = `<h3>Not Authenticated</h3>`
+        }
+      });
+
+      // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+      // firebase.firestore().doc('/foo/bar').get().then(() => { });
+      // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+      // firebase.messaging().requestPermission().then(() => { });
+      // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+      // firebase.analytics(); // call to activate
+      // firebase.analytics().logEvent('tutorial_completed');
+      // firebase.performance(); // call to activate
+      //
+      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+      try {
+        let app = firebase.app();
+        let features = [
+          'auth',
+          'database',
+          'firestore',
+          'functions',
+          'messaging',
+          'storage',
+          'analytics',
+          'remoteConfig',
+          'performance',
+        ].filter(feature => typeof app[feature] === 'function');
+        loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+      } catch (e) {
+        console.error(e);
+        loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+      }
+    });
+  </script>
+
+</body>
+
+</html>

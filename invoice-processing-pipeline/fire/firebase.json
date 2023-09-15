@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/uploader",
+        "run": {
+          "serviceId": "uploader",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/reviewer",
+        "run": {
+          "serviceId": "reviewer",
+          "region": "us-central1"
+        }
+      }
+    ]
+  }
+}

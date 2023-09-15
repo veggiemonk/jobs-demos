@@ -1,52 +1,19 @@
 <!DOCTYPE html5>
 <html>
-    <head>
-        <style>
-            .date, .number {
-                text-align: right;
-            }
 
-            .fixed {
-                text-align: center;
-            }
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/picocss/1.5.10/pico.classless.min.css"
+        integrity="sha512-EvC9tWIAGKq2kEWOcRC+w0JWMaEoQPJ52ZVFLJMT/0Ri3Wq3QPZ/IYGTgfY+buUV1P2NDNiU8w6sXfVUxxcq0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 
-            table {
-                table-layout: fixed;
-                border-collapse: collapse;
-                border: 3px solid black;
-            }
-            thead {
-                font-family: Arial, sans-serif;
-                font-size: 24;
-                font-weight: bold;
-                border-bottom: 1px solid black;
-            }
-
-            tbody {
-                font-family: Arial, sans-serif;
-                font-size: 18;
-                font-weight: normal;
-            }
-
-            td {
-                border-right: 1px solid black;
-                padding: 6px;
-            }
-
-            th {
-                padding: 6px;
-            }
-
-            #submit {
-                font-size: 20px;
-                font-weight: bold;
-                margin-top: 20px;
-                margin-left: 36px;
-            }
-        </style>
-    </head>
-
-    <body>
+<body>
+    <header>
+        <h2>Innovator Hive 2023: Invoice Approval Demo</h2>
+        <p> Views: {{ views }}</p>
+        <p> Approved: {{ approved }}</p>
+    </header>
+    <main>
         <form method="post">
             <table>
                 <thead>
@@ -71,7 +38,8 @@
                         <td class="date">{{ invoice["due_date"] }}</td>
                         <td class="number">{{ invoice["amount_due"] }}</td>
                         <td class="fixed"><a href="{{ invoice['url'] }}" target="_blank">View</a></td>
-                        <td class="fixed"><input type="checkbox" name="{{ invoice['blob_name'] }}" id="{{ invoice['blob_name'] }}" /></td>
+                        <td class="fixed"><input type="checkbox" name="{{ invoice['blob_name'] }}"
+                                id="{{ invoice['blob_name'] }}" /></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -79,5 +47,17 @@
 
             <input type="submit" id="submit" value="Approved selected invoices" />
         </form>
-    </body>
+    </main>
+    <footer>
+        <p>
+            Running on <a href="https://cloud.run">cloud.run</a>
+        </p>
+        <p>
+            <a href="https://cloudonair.withgoogle.com/events/summit-innovatorshive-connect-stockholm-2023"
+                target="_blank">
+                Innovator Hive Stockholm 2023</a>
+        </p>
+    </footer>
+</body>
+
 </html>
